@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translator - CulturaAi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1>AI Voice Translator</h1>
+            <a href="index (1).html">&larr; Back to Home</a>
+        </div>
+    </header>
+    <main>
+        <section class="translator-section">
+            <div class="card translator-card">
+                <h2>AI Voice Translator</h2>
+                <p>Type a phrase to translate and hear it in African languages.</p>
+                <textarea id="inputText" placeholder="Type your phrase here..."></textarea>
+                <select id="languageSelect">
+                    <option value="swahili">Swahili</option>
+                    <option value="kikuyu">Kikuyu</option>
+                    <option value="yoruba">Yoruba</option>
+                    <option value="zulu">Zulu</option>
+                </select>
+                <button id="translateBtn">Translate & Speak</button>
+            </div>
+            
+            <aside class="chat-bot">
+                <div class="chat-header">Cultura Chat</div>
+                <div class="chat-content" id="chatContent">
+                    <p>Welcome! Need help with translation or phrase ideas?</p>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Ask something...">
+                    <button id="sendBtn">Send</button>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <script src="translator.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+</html> 

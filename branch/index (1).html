@@ -1,0 +1,139 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CulturaAi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <h1>Cul Ai</h1>
+                <nav>
+                    <a href="#translator">Translator</a>
+                    <a href="#stories">Stories</a>
+                    <a href="#games">Games</a>
+                    <a href="#community">Community</a>
+                    <a href="signup.html" class="btn">Sign Up</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+ 
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>About Cultural AI</h2>
+                <p>Celebrate African culture through AI-powered storytelling</p>
+                <p>Translate. Listen. Learn. Share.</p>
+                <a href="translator.html" class="btn">Try AI Voice Translator</a>
+                <a href="stories.html" class="btn">Explore Stories</a>
+            </div>
+        </section>
+
+        <section id="translator" class="feature">
+            <div class="container">
+                <h2>AI Voice Translator</h2>
+                <p>Type an English phrase and hear it in Kikuyu, Swahili, Yoruba, or Zulu.</p>
+                <textarea id="inputText" placeholder="Enter text here..."></textarea>
+                <select id="languageSelect">
+                    <option value="swahili">Swahili</option>
+                    <option value="kikuyu">Kikuyu</option>
+                    <option value="yoruba">Yoruba</option>
+                    <option value="zulu">Zulu</option>
+                </select>
+                <button id="translateBtn" class="btn">Translate & Speak</button>
+            </div>
+        </section>
+
+        <section id="stories" class="feature">
+            <div class="container">
+                <h2>Cultural Story Narrator</h2>
+                <p>Listen to folktales, myths, proverbs, and history in English or native languages.</p>
+                <a href="stories.html" class="btn">Play Story</a>
+            </div>
+        </section>
+
+        <section id="games" class="feature">
+            <div class="container">
+                <h2>Game Hub</h2>
+                <p>Flashcards, quizzes, and mini-games to test your knowledge of African heritage.</p>
+                <a href="games.html" class="btn">Start Game</a>
+            </div>
+        </section>
+
+        <section id="community" class="feature">
+            <div class="container">
+                <h2>Community Stories</h2>
+                <p>Share your cultural experiences—read, comment, and rate.</p>
+                <a href="community.html" class="btn">Share a Story</a>
+            </div>
+        </section>
+
+        <!-- Chat Bot Section -->
+        <aside class="chat-bot">
+            <div class="chat-header">Chat Bot</div>
+            <div class="chat-content" id="chatContent">
+                <p>Welcome to CulturaAi Chat! How can I assist you today?</p>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Type your message...">
+                <button id="sendBtn">Send</button>
+            </div>
+            <div class="microphone">
+                <img src="mic-icon.png" alt="Microphone">
+            </div>
+        </aside>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2025 CulturaAi • Preserving African heritage through AI.</p>
+        </div>
+    </footer>
+
+    <script src="scripts.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+</html>
